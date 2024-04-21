@@ -14,3 +14,13 @@ A simple search engine made with Rust
 
 - Rust
 - petite-vue
+
+## Usage
+
+- To parse a file with a url on each line : `cargo run -- --parse <file>`
+- To start the api server : `cargo run`
+
+## Roadmap
+
+- Use dictionary class to ensure only valid words are saved to db
+- Update to gracefully handle errors
