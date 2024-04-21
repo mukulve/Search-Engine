@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script type="module">
+      import { createApp } from "https://unpkg.com/petite-vue?module";
+
+      createApp({
+        results: [],
+        searchText: "",
+        hasSearched: false,
+        themes: [
+          "light",
+          "dark",
+          "cupcake",
+          "bumblebee",
+          "emerald",
+          "corporate",
+          "synthwave",
+          "retro",
+          "cyberpunk",
+          "valentine",
+          "halloween",
+          "garden",
+          "forest",
+          "aqua",
+          "lofi",
+          "pastel",
+          "fantasy",
+          "wireframe",
+          "black",
+          "luxury",
+          "dracula",
+          "cmyk",
+          "autumn",
+          "business",
+          "acid",
+          "lemonade",
+          "night",
+          "coffee",
+          "winter",
+          "dim",
+          "nord",
+          "sunset",
+        ],
+
+        async search() {
+          this.hasSearched = true;
+          const response = await fetch(
+            `http://localhost:3000/?words=${this.searchText}`
+          );
+          const data = await response.json();
+
+          this.results = Object.keys(data).sort((a, b) => {
+            return data[b] - data[a];
+          });
+        },
+      }).mount();
+    </script>
+
+    <title>RS-SEARCH</title>
+  </head>
+  <body v-scope>
+    <header class="flex gap-4 items-center p-10 justify-between">
+      <div class="flex gap-4 items-center">
+        <i class="fa-brands fa-rust text-2xl"></i>
+        <i class="fa-solid fa-magnifying-glass text-2xl"></i>
+      </div>
+      <div class="join">
+        <input
+          id="search"
+          class="input input-bordered join-item w-96"
+          placeholder="Search..."
+          v-model="searchText"
+        />
+        <button class="btn join-item" @click="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn m-1">
+          Theme
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <ul
+          tabindex="0"
+          class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-fit"
+        >
+          <li v-for="theme in themes" :key="theme">
+            <input
+              type="radio"
+              name="theme-dropdown"
+              class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+              :value="theme"
+              :aria-label="theme"
+            />
+          </li>
+        </ul>
+      </div>
+    </header>
+    <div class="p-10" v-if="!hasSearched">
+      <h1 class="text-2xl font-bold">Search Using Input Above</h1>
+    </div>
+    <div class="p-10" v-if="hasSearched">
+      <h1 class="text-2xl font-bold">Search Results</h1>
+      <ul>
+        <li
+          v-for="result in results"
+          :key="result"
+          class="my-2 bg-primary text-primary-content p-4 rounded-lg"
+        >
+          <a :href="result" class="hover:underline">{{ result }}</a>
+        </li>
+      </ul>
+    </div>
+    <footer class="footer footer-center p-10 bg-primary text-primary-content">
+      <aside>
+        <div class="flex gap-4">
+          <i class="fa-brands fa-rust text-3xl"></i>
+          <i class="fa-solid fa-magnifying-glass text-3xl"></i>
+        </div>
+        <p class="font-bold">RS-SEARCH</p>
+        <p>Made By Mukul Verma</p>
+      </aside>
+    </footer>
+  </body>
+</html>
